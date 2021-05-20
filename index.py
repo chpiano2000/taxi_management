@@ -1,18 +1,101 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from datetime import date, timedelta, datetime
+from datetime import date, datetime
+import time
 import sys
 import pymongo
 
 from PyQt5.uic import loadUiType
 
 ui,_ = loadUiType('taxi.ui')
+login,_ = loadUiType('login.ui')
+signup,_ = loadUiType('signup.ui')
 
 url = 'mongodb+srv://todoAppUser:Leanbichphuong0702@cluster0.oeozu.mongodb.net/TaxniManegement?retryWrites=true&w=majority'
 mongo = pymongo.MongoClient(url)
 
+
+class Signup(QWidget, signup):
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.setupUi(self)
+        self.pushButton.clicked.connect(self.Handel_Signup)
+        self.pushButton_2.clicked.connect(self.Switch_To_Login)
+    
+    def Handel_Signup(self):
+        self.db = mongo.taxi_management
+
+        name = self.lineEdit.text()
+        gmail = self.lineEdit_2.text()
+        sex = self.comboBox.currentText()
+        password = self.lineEdit_3.text()
+        confirm_password = self.lineEdit_4.text()
+
+        data = {
+            "name": name,
+            "sex": sex,
+            "gmail": gmail,
+            "password": password,
+            "histories": []
+        }
+        
+        checker = list(self.db.users.find({"gmail": gmail}))
+
+        if gmail == '' or password == '' or name=='' or confirm_password == '':
+            self.label_6.setText('Please fill in the form')
+        elif password != confirm_password:
+            self.label_6.setText('Passwords not match')
+        elif checker == []:
+            self.db.users.insert_one(data)
+            self.window2 = MainApp()
+            self.close()
+            self.window2.setEmail(gmail)
+            self.window2.show()
+        else: 
+            self.label_6.setText("Gmail existed")
+    
+    def Switch_To_Login(self):
+        self.window2 = Login()
+        self.close()
+        self.window2.show()
+
+
+class Login(QWidget, login):
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.setupUi(self)
+        self.pushButton.clicked.connect(self.Handel_Login)
+        self.pushButton_2.clicked.connect(self.Switch_To_Signup)
+    
+    def Handel_Login(self):
+        self.db = mongo.taxi_management
+        gmail = self.lineEdit.text()
+        password = self.lineEdit_2.text()
+
+        data = list(self.db.users.find({"gmail": gmail}))
+
+        if gmail == '' or password == '' :
+            self.label.setText('Please fill in the form')
+        elif data :
+            if password != data[0]['password']:
+                self.label.setText('Password or Email is not match')
+            else: 
+                self.window2 = MainApp()
+                self.close()
+                self.window2.setEmail(gmail)
+                self.window2.show()
+        else:
+            self.label.setText('Password or Gmail is not match')
+        
+    def Switch_To_Signup(self):
+        self.window2 = Signup()
+        self.close()
+        self.window2.show()
+        
+
 class MainApp(QMainWindow, ui):
+    mail = ""
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupUi(self)
@@ -23,6 +106,9 @@ class MainApp(QMainWindow, ui):
         self.dateTimeEdit.setDateTime(QDateTime.currentDateTime())
 
         self.Show_Booking_Info()
+
+    def setEmail(self, mail):
+        gmail = mail
 
     def Handel_UI_Changes(self):
         self.Hiding_Themes()
@@ -38,6 +124,13 @@ class MainApp(QMainWindow, ui):
         self.pushButton_10.clicked.connect(self.Change_Info)
         self.pushButton_11.clicked.connect(self.Rating)
         self.pushButton.clicked.connect(self.Input_Booking_Info)
+
+        self.pushButton_4.clicked.connect(self.Dark_Blue_Theme)
+        self.pushButton_5.clicked.connect(self.Dark_Grey_Theme)
+        self.pushButton_6.clicked.connect(self.Dark_Orange_theme)
+        self.pushButton_7.clicked.connect(self.Dark_Theme)
+
+        self.pushButton_3.clicked.connect(self.Log_Out)
 
     def Show_Themes(self):
         self.groupBox_3.show()
@@ -113,6 +206,9 @@ class MainApp(QMainWindow, ui):
             self.statusBar().showMessage('Please fill in the destination')
         else:
             self.db.users.update_one({"name": 'aiden'}, {"$push": {'histories': data}})
+        
+        location = self.lineEdit.setText('')
+        destination = self.lineEdit_2.setText('')
 
         self.Show_Booking_Info()
         
@@ -140,7 +236,6 @@ class MainApp(QMainWindow, ui):
         self.tableWidget.insertRow(0)
 
         for row, form in enumerate(data):
-            # print(data)
             for column, item in enumerate(list(form.values())):
                 self.tableWidget.setItem(row, column, QTableWidgetItem(str(item)))
                 column+=1
@@ -163,11 +258,45 @@ class MainApp(QMainWindow, ui):
         self.statusBar().showMessage('Saved rating information')
 
         rating = self.plainTextEdit.setPlainText('') 
+    
+    ############################
+    """
+        Change themes
+    """
+    def Dark_Blue_Theme(self):
+        style = open('themes/darkblue.css')
+        style = style.read()
+        self.setStyleSheet(style)
+
+    def Dark_Grey_Theme(self):
+        style = open('themes/darkgrey.css')
+        style = style.read()
+        self.setStyleSheet(style)
+    
+    def Dark_Orange_theme(self):
+        style = open('themes/darkorange.css')
+        style = style.read()
+        self.setStyleSheet(style)
+
+    def Dark_Theme(self):
+        style = open('themes/dark.css')
+        style = style.read()
+        self.setStyleSheet(style)
+    
+    ############################
+    """
+        Logout button
+    """
+    def Log_Out(self):
+        self.window2 = Login()
+        self.close()
+        self.window2.show()
+
 
 
 def main():
     app = QApplication(sys.argv)
-    window = MainApp()
+    window = Login()
     window.show()
     app.exec_()
 
