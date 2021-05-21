@@ -27,7 +27,7 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset resource="icon.qrc">
+     <iconset resource="../icon.qrc">
       <normaloff>:/icons/booking.png</normaloff>:/icons/booking.png</iconset>
     </property>
     <property name="iconSize">
@@ -50,7 +50,7 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset resource="icon.qrc">
+     <iconset resource="../icon.qrc">
       <normaloff>:/icons/setting.png</normaloff>:/icons/setting.png</iconset>
     </property>
     <property name="iconSize">
@@ -73,7 +73,7 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset resource="icon.qrc">
+     <iconset resource="../icon.qrc">
       <normaloff>:/icons/logout.png</normaloff>:/icons/logout.png</iconset>
     </property>
     <property name="iconSize">
@@ -535,6 +535,29 @@
        <string>Change</string>
       </property>
      </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>20</y>
+        <width>161</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>15</pointsize>
+        <italic>true</italic>
+       </font>
+      </property>
+      <property name="text">
+       <string>Change Name</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_3">
@@ -676,7 +699,7 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="icon.qrc"/>
+  <include location="../icon.qrc"/>
  </resources>
  <connections/>
 </ui>
