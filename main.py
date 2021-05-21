@@ -8,9 +8,9 @@ import pymongo
 
 from PyQt5.uic import loadUiType
 
-ui,_ = loadUiType('taxi.ui')
-login,_ = loadUiType('login.ui')
-signup,_ = loadUiType('signup.ui')
+ui,_ = loadUiType('GUI/taxi.ui')
+login,_ = loadUiType('GUI/login.ui')
+signup,_ = loadUiType('GUI/signup.ui')
 
 url = 'mongodb+srv://todoAppUser:Leanbichphuong0702@cluster0.oeozu.mongodb.net/TaxniManegement?retryWrites=true&w=majority'
 mongo = pymongo.MongoClient(url)

@@ -311,11 +311,15 @@
         </property>
         <property name="font">
          <font>
+          <family>Times New Roman</family>
           <pointsize>20</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>        rating</string>
+         <string>Rating</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
        <widget class="QComboBox" name="comboBox_3">
