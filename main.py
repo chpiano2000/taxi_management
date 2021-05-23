@@ -124,6 +124,19 @@ class MainApp_Driver(QMainWindow, ui_driver):
         self.gmail = gmail
         QMainWindow.__init__(self)
         self.setupUi(self)
+        self.Handel_UI_Changes()
+        self.Handel_Buttons()
+
+        def Handel_UI_Changes(self):
+
+
+    def Show_Taxi_Driver_Combobox(self):
+        self.db = mongo.taxi_management
+        data = list(self.db.drivers.find({}, {"name": 1}))
+
+        for i in range(len(data)):
+            self.comboBox.addItem(data[i]['name'])
+
 
     
 ######################## Admin #####################################
