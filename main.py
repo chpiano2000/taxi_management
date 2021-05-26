@@ -1,3 +1,4 @@
+import os
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -5,7 +6,7 @@ from datetime import date, datetime
 import time
 import sys
 import pymongo
-
+import scoketservice 
 from PyQt5.uic import loadUiType
 
 begin,_ = loadUiType('GUI/begin.ui')
@@ -208,6 +209,7 @@ class Login_User(QWidget, login_user):
         
 
 class MainApp_User(QMainWindow, ui_user):
+    
     def __init__(self, gmail):
         self.gmail = gmail
         QMainWindow.__init__(self)
@@ -217,8 +219,28 @@ class MainApp_User(QMainWindow, ui_user):
 
         self.Show_Taxi_Driver_Combobox()
         self.dateTimeEdit.setDateTime(QDateTime.currentDateTime())
-
+        
         self.Show_Booking_Info()
+        
+        ##### Signal update event start #####
+        outside = scoketservice.Outside(self, "", "")
+        scoketservice.mess=""
+        self.thread = outside
+        self.thread.update.connect(self.update)
+        self.thread.start()
+
+    def signalUpdate(self):
+        scoketservice.mess= "Updated database " + str(datetime.now())
+
+
+    def update(self,n):
+        #call the table refresh here
+        print(n)
+        self.statusBar().showMessage(str(n))
+
+    ##### Signal update event stop ######
+
+    
 
     def Handel_UI_Changes(self):
         self.Hiding_Themes()
@@ -319,7 +341,7 @@ class MainApp_User(QMainWindow, ui_user):
         
         location = self.lineEdit.setText('')
         destination = self.lineEdit_2.setText('')
-
+        self.signalUpdate()
         self.Show_Booking_Info()
         
     def Show_Booking_Info(self):
@@ -339,6 +361,8 @@ class MainApp_User(QMainWindow, ui_user):
                 }
             }
         ]
+
+
 
         data = list(self.db.users.aggregate(pipeline))
 
