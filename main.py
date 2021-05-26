@@ -236,6 +236,7 @@ class MainApp_User(QMainWindow, ui_user):
         scoketservice.mess="stop"
         print("exiting")
         time.sleep(1)
+        
         self.thread.stop()
         event.accept()
 

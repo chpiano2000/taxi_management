@@ -36,7 +36,8 @@ class Outside(QtCore.QThread):
             if(mess!=""):
                 if(mess=="stop"):
                     ClientSocket.close()
-                    break
+                    print("closing socket")
+                    return
                 ClientSocket.sendall(str.encode(mess))
                 mess=""
                 
