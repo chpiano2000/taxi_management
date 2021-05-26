@@ -221,7 +221,6 @@ class MainApp_User(QMainWindow, ui_user):
         self.dateTimeEdit.setDateTime(QDateTime.currentDateTime())
         
         self.Show_Booking_Info()
-        
         ##### Signal update event start #####
         outside = scoketservice.Outside(self, "", "")
         scoketservice.mess=""
@@ -232,6 +231,13 @@ class MainApp_User(QMainWindow, ui_user):
     def signalUpdate(self):
         scoketservice.mess= "Updated database " + str(datetime.now())
 
+    def closeEvent(self, event):
+        # do stuff
+        scoketservice.mess="stop"
+        print("exiting")
+        time.sleep(1)
+        self.thread.stop()
+        event.accept()
 
     def update(self,n):
         #call the table refresh here
