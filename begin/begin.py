@@ -5,6 +5,7 @@ from PyQt5.uic import loadUiType
 
 from user.user import Login_User
 from driver.driver import Login_Driver
+from admin.admin import Login_Admin
 from PyQt5.uic import loadUiType
 
 begin,_ = loadUiType('GUI/begin.ui')
@@ -28,4 +29,6 @@ class Begin(QWidget, begin):
         self.window2.show()
 
     def Move_To_Admin(self):
-        pass
+        self.window2 = Login_Admin()
+        self.close()
+        self.window2.show()

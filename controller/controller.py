@@ -1,7 +1,8 @@
 import pymongo
+from decouple import config
 # from module.user import user
 
-url = 'mongodb+srv://todoAppUser:Leanbichphuong0702@cluster0.oeozu.mongodb.net/TaxniManegement?retryWrites=true&w=majority'
+url = config('URL')
 mongo = pymongo.MongoClient(url)
 db = mongo.taxi_management
 
@@ -86,3 +87,76 @@ def check_id(booking_id):
 
 def update_status(booking_id, gmail):
     db.histories.update_one({"histories.booking_id": f"{booking_id}"}, {"$set": {"histories.status": "true", "driver": gmail}})
+
+######################## Admin #####################################
+
+def check_admin(name, password):
+    cursor = db.admin.find({"name": name, "password": password}, {"_id": 0})
+    return list(cursor)
+
+def query_by_user():
+    pipeline = [
+        {
+            '$lookup': {
+                'from': 'drivers', 
+                'localField': 'gmail_driver', 
+                'foreignField': 'gmail', 
+                'as': 'drivers'
+            }
+        }, {
+            '$unwind': {
+                'path': '$drivers'
+            }
+        }, {
+            '$project': {
+                '_id': 0,
+                'booking_id': '$histories.booking_id', 
+                'gmail_user': '$histories.gmail_user', 
+                'time': '$histories.time', 
+                'location': '$location', 
+                'destination': '$histories.destination', 
+                'driver_name': '$drivers.name', 
+                'driver_car': '$drivers.car'
+            }
+        }
+    ]
+    cursor = db.histories.aggregate(pipeline)
+    return list(cursor)
+
+def query_by_driver():
+    pipeline = [
+        {
+            '$lookup': {
+                'from': 'users', 
+                'localField': 'histories.gmail_user', 
+                'foreignField': 'gmail', 
+                'as': 'users'
+            }
+        }, {
+            '$unwind': {
+                'path': '$users'
+            }
+        }, {
+            '$project': {
+                '_id': 0, 
+                'booking_id': '$histories.booking_id', 
+                'gmail_user': '$histories.gmail_user', 
+                'time': '$histories.time', 
+                'location': '$location', 
+                'destination': '$histories.destination', 
+                'driver_name': '$users.name', 
+                'driver_car': '$userss.car', 
+                'gmail_driver': '$gmail_driver'
+            }
+        }
+    ]
+
+    cursor = db.histories.aggregate(pipeline)
+    return list(cursor)
+
+def change_name_admin(old_name, password):
+    cursor = db.admin.find({"name": old_name, 'password': password})
+    return list(cursor)
+
+def update_name_admin(old_name, new_name):
+    db.admin.update({"name": old_name}, {"$set": {"name": new_name}})

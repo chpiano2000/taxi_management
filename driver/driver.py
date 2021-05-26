@@ -5,6 +5,7 @@ from PyQt5.uic import loadUiType
 from datetime import date, datetime
 import pymongo
 import socketservice
+import time
 from controller.controller import *
 ui_driver,_ = loadUiType('GUI/main_driver.ui')
 login_driver,_ = loadUiType('GUI/login_driver.ui')
@@ -98,6 +99,7 @@ class MainApp_Driver(QMainWindow, ui_driver):
         self.handel_ui_change()
         self.Handel_Buttons()
         self.Show_Booking_Info()
+        
     
     ##### Signal update event start #####
         outside = socketservice.Outside(self, "", "")
@@ -109,6 +111,13 @@ class MainApp_Driver(QMainWindow, ui_driver):
     def signalUpdate(self):
         socketservice.mess= "Updated database " + str(datetime.now())
 
+    def closeEvent(self, event):
+        # do stuff
+        socketservice.mess="stop"
+        print("exiting")
+        time.sleep(1)
+        self.thread.stop()
+        event.accept()
 
     def update(self,n):
         #call the table refresh here
@@ -116,8 +125,6 @@ class MainApp_Driver(QMainWindow, ui_driver):
         print(n)
         self.statusBar().showMessage(str(n))
 
-    ##### Signal update event stop ######
-    
     def handel_ui_change(self):
         self.Hiding_Themes()
         self.tabWidget.tabBar().setVisible(False)
@@ -199,8 +206,14 @@ class MainApp_Driver(QMainWindow, ui_driver):
     
     def response_booking(self):
         booking_id = self.lineEdit.text()
-        # print((booking_id))
-        # print(check_id(booking_id))
+
         if check_id(booking_id) != []:
             update_status(booking_id, self.gmail)
             self.signalUpdate()
+        
+    ############################
+    """
+        Logout button
+    """
+    def Log_Out(self):
+        self.close()

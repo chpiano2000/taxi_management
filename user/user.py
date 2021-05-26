@@ -6,10 +6,10 @@ from datetime import date, datetime
 import random
 import pymongo
 import socketservice
+import time
 
-# from module.user import user
+
 from controller.controller import *
-mongo = pymongo.MongoClient(url)
 
 ui_user,_ = loadUiType('GUI/main_user.ui')
 login_user,_ = loadUiType('GUI/login_user.ui')
@@ -112,6 +112,14 @@ class MainApp_User(QMainWindow, ui_user):
     def signalUpdate(self):
         socketservice.mess= "Updated database " + str(datetime.now())
 
+    def closeEvent(self, event):
+        # do stuff
+        socketservice.mess="stop"
+        print("exiting")
+        time.sleep(1)
+        self.thread.stop()
+        event.accept()
+
     tempbookingid = ""
     def update(self,n):
         #call the table refresh here
@@ -124,7 +132,6 @@ class MainApp_User(QMainWindow, ui_user):
         self.statusBar().showMessage(str(n))
 
     ##### Signal update event stop ######
-
 
     def Handel_UI_Changes(self):
         self.Hiding_Themes()
@@ -224,14 +231,8 @@ class MainApp_User(QMainWindow, ui_user):
         location = self.lineEdit.setText('')
         destination = self.lineEdit_2.setText('')
 
-        # a = check_status(booking_id)
-        # print(a[0]['status'])
-        # if a[0]['status'] == 'true':
-        #     self.label_12.setText('found your driver')
-
         self.signalUpdate()
         self.Show_Booking_Info()
-        # self.Change_Info(booking_id)
         
     def Show_Booking_Info(self):
         convert_datetime = lambda x: date(datetime.fromtimestamp(x).year, datetime.fromtimestamp(x).month, datetime.fromtimestamp(x).day)
@@ -295,7 +296,4 @@ class MainApp_User(QMainWindow, ui_user):
         Logout button
     """
     def Log_Out(self):
-        from begin.begin import Begin
-        self.window2 = Begin()
         self.close()
-        self.window2.show()

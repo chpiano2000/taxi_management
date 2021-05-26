@@ -16,7 +16,7 @@ except socket.error as e:
     print(str(e))
 
 print('Waitiing for a Connection..')
-ServerSocket.listen(500)
+ServerSocket.listen(5)
 
 lock = threading.Lock()
 gMsg = ""
