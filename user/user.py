@@ -32,13 +32,6 @@ class Signup_User(QWidget, signup_user):
         password = self.lineEdit_3.text()
         confirm_password = self.lineEdit_4.text()
 
-        data = {
-            "name": name,
-            "sex": sex,
-            "gmail": gmail,
-            "password": password
-        }
-
         checker = check_user(gmail)
 
         if gmail == '' or password == '' or name=='' or confirm_password == '':
@@ -46,7 +39,7 @@ class Signup_User(QWidget, signup_user):
         elif password != confirm_password:
             self.label_6.setText('Passwords not match')
         elif checker == []:
-            add_users(data)
+            add_users(name,sex,gmail,password)
             self.window2 = MainApp_User(gmail=gmail)
             self.close()
             self.window2.show()

@@ -8,7 +8,15 @@ db = mongo.taxi_management
 
 ######################## USER #####################################
 
-def add_users(data):
+def add_users(name,sex,gmail,password):
+
+    
+    data = {
+            "name": name,
+            "sex": sex,
+            "gmail": gmail,
+            "password": password
+        }
     db.users.insert_one(data)
 
 def check_user(gmail):
