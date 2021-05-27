@@ -37,8 +37,6 @@ class Signup_Driver(QWidget, signup_driver):
             "car": car,
             "gmail": gmail,
             "password": password,
-            "histories": [],
-            "star": []
         }
         
         checker = check_driver(gmail)
