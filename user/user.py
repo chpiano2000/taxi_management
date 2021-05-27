@@ -121,8 +121,8 @@ class MainApp_User(QMainWindow, ui_user):
             check = check_status(self.tempbookingid)
             if check[0]['status'] == 'true':
                 self.label_12.setText('found your driver')
-        except Exception as e:
-            print(e)
+        except:
+            pass
         print(n)
         self.statusBar().showMessage(str(n))
 
@@ -140,7 +140,7 @@ class MainApp_User(QMainWindow, ui_user):
         self.pushButton_2.clicked.connect(self.Open_Setting_Tab)
 
         self.pushButton_10.clicked.connect(self.Change_Info)
-        self.pushButton_11.clicked.connect(self.Rating)
+        
         self.pushButton.clicked.connect(self.Input_Booking_Info)
 
         self.pushButton_4.clicked.connect(self.Dark_Blue_Theme)
