@@ -10,15 +10,17 @@ db = mongo.taxi_management
 
 def add_users(name,sex,gmail,password):
     usr = user(name, gmail, sex, password, None)
-    data = usr.get_data_add_usr()
-    db.users.insert_one(data)
+    usr.add_usr()
+    #data = usr.get_data_add_usr()
+    #db.users.insert_one(data)
 
 def check_user(gmail):
     return list(db.users.find({"gmail": gmail}))
 
 def update_name(password, name, gmail):
     usr = user(name, gmail, None, password, None)
-    db.users.update_one({'gmail': gmail}, usr.get_name_data())
+    usr.updateg_usr_name()
+    #db.users.update_one({'gmail': gmail}, usr.get_name_data())
 
 def check_history(gmail):
     cursor = db.histories.find({"gmail": gmail})
