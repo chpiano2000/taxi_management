@@ -93,7 +93,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -368,6 +368,9 @@
         <height>41</height>
        </rect>
       </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
      </widget>
      <widget class="QLabel" name="label_7">
       <property name="geometry">
@@ -409,6 +412,9 @@
         <width>231</width>
         <height>41</height>
        </rect>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
       </property>
      </widget>
      <widget class="QLabel" name="label_9">
