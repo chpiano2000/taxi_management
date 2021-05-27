@@ -17,7 +17,7 @@ class histories():
             "gmail_user": self.gmail_user,
             "time": self.time,
             "location": self.location,
-            "destination": self.estination,
+            "destination": self.destination,
             "status": self.status
         }
         db.histories.insert_one({"histories": data})
