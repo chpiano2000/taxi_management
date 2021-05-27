@@ -206,20 +206,13 @@ class MainApp_User(QMainWindow, ui_user):
         destination = self.lineEdit_2.text()
         booking_id = str(convert_unix(time.toPyDateTime()))
 
-        data = {
-            "booking_id": booking_id,
-            "gmail_user": self.gmail,
-            "time": convert_unix(time.toPyDateTime()),
-            "location": location,
-            "destination": destination,
-            "status": "false"
-        }
+        
         if location == '' :
             self.statusBar().showMessage('Please fill in the location')
         elif destination == '':
             self.statusBar().showMessage('Please fill in the destination')
         else:
-            insert_histories(data)
+            insert_histories(booking_id,self.gmail,convert_unix(time.toPyDateTime()),location,destination,"false")
             self.tempbookingid = booking_id
             self.label_12.setText('Your request has been sent, please wait')
         

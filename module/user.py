@@ -25,17 +25,8 @@ class user():
     def get_name_data(self):
         data = {"$set": {"name": self.name}}
         return data
-      
-    def get_data_add_usr(self):
-        data = {
-            "name": self.name,
-            "sex": self.sex,
-            "gmail": self.gmail,
-            "password": self.password
-        }
-        return data
 
-    # setter method
-    def set_age(self, x):
-        self._age = x
-  
+    def getHistory(self):
+        cursor = db.histories.find({"gmail": gmail})
+        return list(cursor)
+

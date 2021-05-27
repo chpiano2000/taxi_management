@@ -1,6 +1,8 @@
+from taxi_management.module.histories import histories
 import pymongo
 from decouple import config
 from module.user import user
+from module.histories import histories
 
 url = config('URL')
 mongo = pymongo.MongoClient(url)
@@ -23,14 +25,12 @@ def update_name(password, name, gmail):
     #db.users.update_one({'gmail': gmail}, usr.get_name_data())
 
 def check_history(gmail):
-    cursor = db.histories.find({"gmail": gmail})
-    return list(cursor)
+    usr = user(None, gmail, None, None, None)
+    return usr.getHistory()
 
-def insert_histories(data):
-    db.histories.insert_one({"histories": data})
-
-def update_histories(gmail, data):
-    db.histories.update_one({"gmail": gmail}, {"$push": {'histories': data}})
+def insert_histories(booking_id,gmail_user,time,location,destination,status):
+    hs = histories(booking_id,gmail_user,time,location,destination,status)
+    hs.add_history()
 
 def query_histories(gmail):
     pipeline = [
@@ -51,8 +51,6 @@ def query_histories(gmail):
     data = list(db.histories.aggregate(pipeline))
     return data
 
-def update_driver_rating(driver, rating, star):
-    db.drivers.update_one({"name": driver}, {"$push": {"star": {"star": star, "rating": rating}}})
 
 def check_status(booking_id):
     pipeline = [
