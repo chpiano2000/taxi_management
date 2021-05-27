@@ -232,7 +232,7 @@ class MainApp_User(QMainWindow, ui_user):
     def Show_Booking_Info(self):
         convert_datetime = lambda x: date(datetime.fromtimestamp(x).year, datetime.fromtimestamp(x).month, datetime.fromtimestamp(x).day)
         
-        data = query_histories()
+        data = query_histories(self.gmail)
 
         self.tableWidget.setRowCount(0)        
         self.tableWidget.insertRow(0)

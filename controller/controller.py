@@ -30,8 +30,10 @@ def insert_histories(data):
 def update_histories(gmail, data):
     db.histories.update_one({"gmail": gmail}, {"$push": {'histories': data}})
 
-def query_histories():
+def query_histories(gmail):
     pipeline = [
+        {"$match": {"histories.gmail_user": gmail}},
+
         {
             '$unwind': {
                 'path': '$histories'
