@@ -2,7 +2,8 @@ import pymongo
 from decouple import config
 from module.user import user
 from module.histories import histories
-
+from module.driver import driver
+from module.admin import admin
 url = config('URL')
 mongo = pymongo.MongoClient(url)
 db = mongo.taxi_management
@@ -20,7 +21,7 @@ def check_user(gmail):
 
 def update_name(password, name, gmail):
     usr = user(name, gmail, None, password, None)
-    usr.updateg_usr_name()
+    usr.update_usr_name()
     #db.users.update_one({'gmail': gmail}, usr.get_name_data())
 
 def check_history(gmail):
@@ -68,10 +69,14 @@ def check_status(booking_id):
 ######################## Driver #####################################
 
 def check_driver(gmail):
-    return list(db.drivers.find({"gmail": gmail}))
+    dv = driver(None,None,None,gmail,None)
+    return dv.find_driver()
 
-def add_driver(data):
-    db.drivers.insert_one(data)
+def add_driver(name,sex,car,gmail,password):
+    dv = driver(name,sex,car,gmail,password)
+    dv.add_driver()
+    
+
 
 def show_history_driver():
     pipeline = [
@@ -86,17 +91,18 @@ def show_history_driver():
     return list(db.histories.aggregate(pipeline))
 
 def check_id(booking_id):
-    cursor = db.histories.find({"histories.booking_id": f"{booking_id}"})
-    return list(cursor)
+    bk = histories(booking_id,None,None,None,None,None)
+    return bk.get_booking()
 
 def update_status(booking_id, gmail):
-    db.histories.update_one({"histories.booking_id": f"{booking_id}"}, {"$set": {"histories.status": "true", "driver": gmail}})
-
+    bk = histories(booking_id,gmail,None,None,None,None)
+    bk.update_booking()
+    
 ######################## Admin #####################################
 
 def check_admin(name, password):
-    cursor = db.admin.find({"name": name, "password": password}, {"_id": 0})
-    return list(cursor)
+    ad = admin(user,password)
+    return ad.check_auth()
 
 def query_by_user():
     pipeline = [
@@ -163,4 +169,6 @@ def change_name_admin(old_name, password):
     return list(cursor)
 
 def update_name_admin(old_name, new_name):
-    db.admin.update({"name": old_name}, {"$set": {"name": new_name}})
+    ad = admin(old_name,None)
+    ad.change_name(new_name)
+    

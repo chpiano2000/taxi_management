@@ -18,7 +18,13 @@ class histories():
             "time": self.time,
             "location": self.location,
             "destination": self.destination,
-            "status": self.status
+            "status": "false"
         }
         db.histories.insert_one({"histories": data})
   
+    def get_booking(self):
+        cursor = db.histories.find({"histories.booking_id": f"{self.booking_id}"})
+        return list(cursor)
+
+    def update_booking(self):
+        db.histories.update_one({"histories.booking_id": f"{self.booking_id}"}, {"$set": {"histories.status": "true", "driver": self.gmail_user}})

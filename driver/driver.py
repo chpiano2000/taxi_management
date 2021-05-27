@@ -31,13 +31,7 @@ class Signup_Driver(QWidget, signup_driver):
         confirm_password = self.lineEdit_4.text()
         car = self.lineEdit_5.text()
 
-        data = {
-            "name": name,
-            "sex": sex,
-            "car": car,
-            "gmail": gmail,
-            "password": password,
-        }
+        
         
         checker = check_driver(gmail)
 
@@ -46,7 +40,7 @@ class Signup_Driver(QWidget, signup_driver):
         elif password != confirm_password:
             self.label_6.setText('Passwords not match')
         elif checker == []:
-            add_driver(data)
+            add_driver(name,sex,car,gmail,password)
             self.window2 = MainApp_Driver(gmail=gmail)
             self.close()
             self.window2.show()
@@ -140,6 +134,7 @@ class MainApp_Driver(QMainWindow, ui_driver):
         self.pushButton_7.clicked.connect(self.Dark_Theme)
 
         self.pushButton.clicked.connect(self.response_booking)
+        self.pushButton_10.clicked.connect(self.Change_Info)
     
     def Show_Themes(self):
         self.groupBox_3.show()
@@ -158,6 +153,25 @@ class MainApp_Driver(QMainWindow, ui_driver):
         self.window2 = Begin()
         self.close()
         self.window2.show()
+    
+    def Change_Info(self):
+        name = self.lineEdit_3.text()
+        gmail = self.lineEdit_4.text()
+        password = self.lineEdit_5.text()
+        confirm_password = self.lineEdit_6.text()
+
+        if name == '' or gmail == '' or password == 'None' or confirm_password == 'None':
+            self.statusBar().showMessage('Please fill in the form')
+        elif password != confirm_password:
+            self.statusBar().showMessage('Password is not match')
+        elif check_user(self.gmail):
+            update_name(password, name, gmail)
+            self.statusBar().showMessage('Information Changed')
+        
+        name = self.lineEdit_3.setText('')
+        gmail = self.lineEdit_4.setText('')
+        password = self.lineEdit_5.setText('')
+        confirm_password = self.lineEdit_6.setText('')
     
     ############################
     """

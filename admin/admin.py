@@ -177,7 +177,7 @@ class MainApp_Admin(QMainWindow, ui_admin):
 
         if old_name == '' or new_name == '' or password == '':
             self.label.setText('please fill in the form')
-        elif change_name_admin(old_name, password) == []:
+        elif check_admin(old_name, password) == []:
             self.label.setText('old name or password is not correct')
         else:
             update_name_admin(old_name, new_name)
