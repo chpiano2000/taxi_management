@@ -51,10 +51,15 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>461</width>
+          <width>501</width>
           <height>481</height>
          </rect>
         </property>
+        <column>
+         <property name="text">
+          <string>ID</string>
+         </property>
+        </column>
         <column>
          <property name="text">
           <string>user_gmail</string>
