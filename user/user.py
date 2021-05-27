@@ -124,10 +124,12 @@ class MainApp_User(QMainWindow, ui_user):
     def update(self,n):
         #call the table refresh here
         self.Show_Booking_Info()
-
-        check = check_status(self.tempbookingid)
-        if check[0]['status'] == 'true':
-            self.label_12.setText('found your driver')
+        try:
+            check = check_status(self.tempbookingid)
+            if check[0]['status'] == 'true':
+                self.label_12.setText('found your driver')
+        except Exception as e:
+            print(e)
         print(n)
         self.statusBar().showMessage(str(n))
 
