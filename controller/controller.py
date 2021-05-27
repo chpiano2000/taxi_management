@@ -29,8 +29,8 @@ def check_history(gmail):
 def insert_histories(data):
     db.histories.insert_one({"histories": data})
 
-def update_histories(gmail, data):
-    db.histories.update_one({"gmail": gmail}, {"$push": {'histories': data}})
+# def update_histories(gmail, data):
+#     db.histories.update_one({"gmail": gmail}, {"$push": {'histories': data}})
 
 def query_histories(gmail):
     pipeline = [
