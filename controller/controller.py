@@ -1,6 +1,6 @@
 import pymongo
 from decouple import config
-# from module.user import user
+from module.user import user
 
 url = config('URL')
 mongo = pymongo.MongoClient(url)
@@ -9,21 +9,16 @@ db = mongo.taxi_management
 ######################## USER #####################################
 
 def add_users(name,sex,gmail,password):
-
-    
-    data = {
-            "name": name,
-            "sex": sex,
-            "gmail": gmail,
-            "password": password
-        }
+    usr = user(name, gmail, sex, password, None)
+    data = usr.get_data_add_usr()
     db.users.insert_one(data)
 
 def check_user(gmail):
     return list(db.users.find({"gmail": gmail}))
 
 def update_name(password, name, gmail):
-    db.users.update_one({'password': password}, {"$set": {"name": name, "gmail": gmail}})
+    usr = user(name, gmail, None, password, None)
+    db.users.update_one({'gmail': gmail}, usr.get_name_data())
 
 def check_history(gmail):
     cursor = db.histories.find({"gmail": gmail})
