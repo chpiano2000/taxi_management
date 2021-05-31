@@ -4,6 +4,7 @@ from module.user import user
 from module.histories import histories
 from module.driver import driver
 from module.admin import admin
+
 url = config('URL')
 mongo = pymongo.MongoClient(url)
 db = mongo.taxi_management
@@ -13,8 +14,6 @@ db = mongo.taxi_management
 def add_users(name,sex,gmail,password):
     usr = user(name, gmail, sex, password, None)
     usr.add_usr()
-    #data = usr.get_data_add_usr()
-    #db.users.insert_one(data)
 
 def check_user(gmail):
     return list(db.users.find({"gmail": gmail}))
@@ -101,7 +100,7 @@ def update_status(booking_id, gmail):
 ######################## Admin #####################################
 
 def check_admin(name, password):
-    ad = admin(user,password)
+    ad = admin(name,password)
     return ad.check_auth()
 
 def query_by_user():
@@ -157,6 +156,38 @@ def query_by_driver():
                 'driver_name': '$users.name', 
                 'driver_car': '$userss.car', 
                 'gmail_driver': '$gmail_driver'
+            }
+        }
+    ]
+
+    cursor = db.histories.aggregate(pipeline)
+    return list(cursor)
+
+def query_by_user():
+    pipeline = [
+        {
+            '$lookup': {
+                'from': 'users', 
+                'localField': 'histories.gmail_user', 
+                'foreignField': 'gmail', 
+                'as': 'users'
+            }
+        }, {
+            '$unwind': {
+                'path': '$users'
+            }
+        }, {
+            '$project': {
+                '_id': 0, 
+                'booking_id': '$histories.booking_id', 
+                'gmail_user': '$histories.gmail_user', 
+                'time': '$histories.time', 
+                'location': '$location', 
+                'destination': '$histories.destination', 
+                'driver_name': '$users.name', 
+                'driver_car': '$userss.car', 
+                'gmail_driver': '$gmail_driver',
+                'status': "$histories.status" 
             }
         }
     ]

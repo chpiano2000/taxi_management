@@ -239,21 +239,6 @@ class MainApp_User(QMainWindow, ui_user):
                 column+=1
             row_position = self.tableWidget.rowCount()
             self.tableWidget.insertRow(row_position)
-
-    
-    ############################
-    """
-        Detail in booking: rating tab
-    """
-    def Rating(self):
-        star = self.comboBox_3.currentText()
-        rating = self.plainTextEdit.toPlainText()
-        driver = self.comboBox.currentText()
-
-        update_driver_rating(star, rating, driver)
-        self.statusBar().showMessage('Saved rating information')
-
-        rating = self.plainTextEdit.setPlainText('') 
     
     ############################
     """
